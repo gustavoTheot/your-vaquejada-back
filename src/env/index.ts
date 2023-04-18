@@ -2,8 +2,11 @@ import 'dotenv/config'
 import {z} from 'zod'
 
 const envSchema = z.object({
+    NODE_ENV: z.enum(['developer', 'test', 'production']).default('developer'),
+    DATABASE_CLIENT: z.enum(['sqlite', 'pg']).default('sqlite'),
     DATABASE_URL: z.string(),
     PORT: z.number().default(3333)
+
 })
 
 const _env = envSchema.safeParse(process.env)
