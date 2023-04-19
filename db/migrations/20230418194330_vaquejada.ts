@@ -6,9 +6,11 @@ export async function up(knex: Knex): Promise<void> {
         table.uuid('vaquejada_id').primary()
         table.uuid('password').unique().notNullable()
         table.string('puller').notNullable()
-        table.string('horse').notNullable()
+        table.string('horseOne').notNullable()
+        table.string('horseTwo').notNullable()
         table.string('bateEsteira').notNullable()
-        table.foreign('id_vaquejada').references('manager.manager_id').deferrable('deferred')
+        table.uuid('id_vaquejada').references('manager_id').inTable('manager')
+        table.boolean('next').references('administrator_id').inTable('administrator')
     })
 }
 
