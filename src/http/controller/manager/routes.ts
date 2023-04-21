@@ -1,10 +1,8 @@
 import {FastifyInstance} from 'fastify'
-import { createManager } from './createManager'
-import { listManagers } from './listManager'
-import { deleteManager } from './deleteManager'
+import { createManager } from './create'
+import { listManagers } from './list'
 
-export function appRouter(app: FastifyInstance){
+export async function managerRoutes(app: FastifyInstance){
     app.post("/manager", createManager)
     app.get("/manager", listManagers)
-    app.delete("manager/:id", deleteManager)
 }
