@@ -9,6 +9,7 @@ interface CreateManagerUseCase{
     email: string,
     password: string,
     cowboy_number: number,
+    adm_id: string
 }
 
 export async function createManagerUseCase({name,
@@ -16,17 +17,18 @@ export async function createManagerUseCase({name,
     cpf,
     email,
     password,
-    cowboy_number}: CreateManagerUseCase){
+    cowboy_number, adm_id}: CreateManagerUseCase){
         
     const passwordHash = await hash(password, 6)
 
     await knex('manager').insert({
         id: randomUUID(),
-        name: name, 
-        phone: phone,
-        cpf: cpf, 
-        email: email, 
+        name,
+        phone,
+        cpf,
+        email,
         password: passwordHash, 
-        cowboy_number: cowboy_number
+        cowboy_number,
+        adm_id
     })
 }

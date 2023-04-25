@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import { knex } from "../../../database";
+import { randomUUID } from "crypto";
 
 export async function createAdminstrator(request: FastifyRequest, response: FastifyReply){
     const createAdministratorBodySchema = z.object({
@@ -12,6 +13,7 @@ export async function createAdminstrator(request: FastifyRequest, response: Fast
     const {name, email, password} = createAdministratorBodySchema.parse(request.body)
 
     await knex('administrator').insert({
+        id: randomUUID(),
         name,
         email, 
         password

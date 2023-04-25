@@ -1,5 +1,4 @@
 import {compare} from 'bcrypt'
-import {sign} from 'jsonwebtoken'
 import { knex } from '../database'
 
 interface IRequest{
@@ -7,7 +6,7 @@ interface IRequest{
     password: string,
 }
 
-class AuthenticateManagerUseCase{
+export class AuthenticateManagerUseCase{
     async execute({email, password}:IRequest){
         const userAlreadyExists = await knex('manager').where('email', email).first()
 
@@ -21,15 +20,8 @@ class AuthenticateManagerUseCase{
             throw new Error("User or password incorrect")
         }
 
-        // gerando token
-        const token = sign({}, "718b1b55-bde1-40da-868f-8d31ccc9e7d0", {
-            subject: userAlreadyExists.id,
-            expiresIn: "120s"
-        })
-
-        return {token}
+        return {userAlreadyExists}
         
     }  
 }
 
-export {AuthenticateManagerUseCase};
