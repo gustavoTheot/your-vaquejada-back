@@ -18,6 +18,23 @@ export async function createManagerUseCase({name,
     email,
     password,
     cowboy_number, adm_id}: CreateManagerUseCase){
+
+    const cpfAlreadyExists = await knex('manager')
+        .select('*')
+        .where('cpf', cpf)
+        .first()
+
+    const emailAlreadyExists = await knex('manager')
+        .select('*')
+        .where('email', email)
+        .first()
+
+    if(cpfAlreadyExists){
+        throw new Error('CPF already exists')
+    }
+    if(emailAlreadyExists){
+        throw new Error('Email already exists')
+    }
         
     const passwordHash = await hash(password, 6)
 
@@ -31,4 +48,6 @@ export async function createManagerUseCase({name,
         cowboy_number,
         adm_id
     })
+
+    
 }

@@ -1,9 +1,11 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import z from 'zod'
-import { createManagerUseCase } from "../../../useCases/createUser";
-import { knex } from "../../../database";
-import { error } from "console";
 import { createVaquejadaUeCase } from "../../../useCases/createVaquejada";
+
+interface  CustomerError{
+    message: string,
+    code: number
+}
 
 export async function createVaquejada(request: FastifyRequest, response: FastifyReply) {
     const createManagerBodySchema = z.object({
@@ -14,13 +16,16 @@ export async function createVaquejada(request: FastifyRequest, response: Fastify
     const {title, manager_id} = createManagerBodySchema.parse(
         request.body
     )
+    
 
    try{
     await createVaquejadaUeCase({title, manager_id})
-   }catch(err){
-        return response.status(400).send({message: 'Error in create vaquejada'})
+
+   }catch(error){
+        if(error instanceof Error)
+        return response.status(400).send({error: error.message})
    }
 
-    return response.status(201).send()
+    return response.status(201).send({message: 'Success'})
     
 }

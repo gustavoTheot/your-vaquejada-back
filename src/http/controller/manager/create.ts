@@ -19,10 +19,12 @@ export async function createManager(request: FastifyRequest, response: FastifyRe
 
     try{
         await createManagerUseCase({name, phone, cpf, email, password, cowboy_number, adm_id})
-    }catch(err){
-        response.status(409).send()
+
+    }catch(error){
+        if(error instanceof Error)
+        return response.status(400).send({error: error.message})
     }
 
-    return response.status(201).send()
+    return response.status(201).send({message: 'Successfully created manager'})
     
 }

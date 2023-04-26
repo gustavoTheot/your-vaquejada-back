@@ -22,7 +22,7 @@ export async function authenticateManager(request: FastifyRequest, response: Fas
         const token = await response.jwtSign({}, {
             sign: {
                 sub: user.userAlreadyExists.id,
-                expiresIn: '1d'
+                expiresIn: '30s'
             },
         })
 

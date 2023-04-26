@@ -10,12 +10,20 @@ export async function createVaquejadaUeCase({
     manager_id,
    }: CreateManagerUseCase){
 
-    const managerAlreadyExists = await knex('manager').select('*').first().where('id', manager_id)
+    const dataManager = await knex('manager').select('*').where('id', manager_id).first()
 
-    if(!managerAlreadyExists){
-        throw new Error('Error in create vaquejada')
+    if(!dataManager){
+        throw new Error('Manager does not exist')
     }
-        
+
+    const {cowboy_number} = dataManager
+
+    if(cowboy_number <= 0){
+        throw new Error('Amount of cowboy exceeded')
+    }
+
+    await knex('manager').where({id: manager_id}).update({cowboy_number: cowboy_number-1})
+
     await knex('vaquejada').insert({
         title: title,
         manager_id: manager_id

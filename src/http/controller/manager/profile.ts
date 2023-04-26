@@ -1,5 +1,4 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { AuthenticateManagerUseCase } from "../../../useCases/authenticate";
 import { knex } from "../../../database";
 
 export async function profile(request: FastifyRequest, response: FastifyReply){
