@@ -5,6 +5,7 @@ import { authenticateManager } from './authenticate'
 import { middleAutheticate } from '../../middlewares/middlewareAuthenticate'
 import { profile } from './profile'
 import { refresh } from './refresh'
+import { creations } from './creations'
 
 export async function managerRoutes(app: FastifyInstance){
     app.post("/manager", createManager)
@@ -15,6 +16,8 @@ export async function managerRoutes(app: FastifyInstance){
     app.patch('/token/refresh', refresh)
 
     app.get('/me', {onRequest: [middleAutheticate]} ,profile)
+
+    app.get('/me/creations', creations)
 
     
 }
