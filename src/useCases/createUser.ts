@@ -2,7 +2,7 @@ import { hash } from "bcrypt"
 import { randomUUID } from "crypto"
 import { knex } from "../database"
 
-interface CreateManagerUseCase{
+interface ceateManagerUseCase{
     name: string,
     phone: number,
     cpf: string,
@@ -12,14 +12,15 @@ interface CreateManagerUseCase{
     adm_id: string
 }
 
-export async function createManagerUseCase({name,
-    phone,
-    cpf,
-    email,
-    password,
-    cowboy_number, adm_id}: CreateManagerUseCase){
+export class CreateManagerUseCase{
+    async create({name,
+        phone,
+        cpf,
+        email,
+        password,
+        cowboy_number, adm_id}: ceateManagerUseCase){
 
-    const cpfAlreadyExists = await knex('manager')
+            const cpfAlreadyExists = await knex('manager')
         .select('*')
         .where('cpf', cpf)
         .first()
@@ -49,5 +50,8 @@ export async function createManagerUseCase({name,
         adm_id
     })
 
-    
+    }
 }
+
+
+    

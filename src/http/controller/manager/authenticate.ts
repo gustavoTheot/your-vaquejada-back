@@ -18,15 +18,33 @@ export async function authenticateManager(request: FastifyRequest, response: Fas
             password
         })
 
-        // gerando token
-        const token = await response.jwtSign({}, {
+        // gerando token que fica disponível para todos visualizarem
+        const token = await response.jwtSign({
+            role: user.userAlreadyExists.role
+        }, {
             sign: {
                 sub: user.userAlreadyExists.id,
                 expiresIn: '30s'
             },
         })
 
-        return response.status(200).send({token})
+        // token "secreto" 
+        const refreshToken = await response.jwtSign({
+            role: user.userAlreadyExists.role
+        },{
+            sign: {
+                sub: user.userAlreadyExists.id,
+                expiresIn: "2d",
+            }
+        })
+
+        return response.setCookie('refreshToken', refreshToken, {
+            path: '/', // quais rotas vão ter acesso
+            secure: true, // está utilizando https?
+            sameSite: true, // só é acessivel dentro do mesmo dominio
+            httpOnly: true // acessado pelo back e n pelo front
+        }).status(200).send({token})
+        
 
     }catch(err){
         if(err instanceof Error){
@@ -37,21 +55,3 @@ export async function authenticateManager(request: FastifyRequest, response: Fas
     }
     
 }
-
-/*
-         const refreshToken = await response.jwtSign({
-            role: user.userAlreadyExists.role
-        },{
-            sign: {
-                sub: user.userAlreadyExists.id,
-                expiresIn: "5s"
-            }
-        })
-
-        return response.setCookie('refreshToken', refreshToken, {
-            path: '/',
-            secure: true,
-            sameSite: true,
-            httpOnly: true
-        }).status(200).send({token})
-        */

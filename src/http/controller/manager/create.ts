@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import z from 'zod'
-import { createManagerUseCase } from "../../../useCases/createUser";
+import { CreateManagerUseCase } from "../../../useCases/createUser";
 
 export async function createManager(request: FastifyRequest, response: FastifyReply) {
     const createManagerBodySchema = z.object({
@@ -18,7 +18,8 @@ export async function createManager(request: FastifyRequest, response: FastifyRe
     )
 
     try{
-        await createManagerUseCase({name, phone, cpf, email, password, cowboy_number, adm_id})
+        const createManagerUseCase = new CreateManagerUseCase()
+        await createManagerUseCase.create({name, phone, cpf, email, password, cowboy_number, adm_id})
 
     }catch(error){
         if(error instanceof Error)

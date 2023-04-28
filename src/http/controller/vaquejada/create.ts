@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import z from 'zod'
-import { createVaquejadaUeCase } from "../../../useCases/createVaquejada";
+import { CreateVaquejadaUeCase } from "../../../useCases/createVaquejada";
 
 interface  CustomerError{
     message: string,
@@ -19,7 +19,8 @@ export async function createVaquejada(request: FastifyRequest, response: Fastify
     
 
    try{
-    await createVaquejadaUeCase({title, manager_id})
+    const createVaquejadaUseCase = new CreateVaquejadaUeCase()
+    await createVaquejadaUseCase.create({title, manager_id})
 
    }catch(error){
         if(error instanceof Error)

@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 
 export async function refresh(request: FastifyRequest, response: FastifyReply){
+    // usuário está autenticado?
     await request.jwtVerify({onlyCookie: true})
 
     const token = await response.jwtSign({}, {
