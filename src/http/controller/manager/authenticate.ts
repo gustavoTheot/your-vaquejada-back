@@ -13,27 +13,27 @@ export async function authenticateManager(request: FastifyRequest, response: Fas
     try{
         const authenticateManagerUseCase = new AuthenticateManagerUseCase()
 
-        const user = await authenticateManagerUseCase.execute({
+        const {userAlreadyExists} = await authenticateManagerUseCase.execute({
             email, 
             password
         })
 
         // gerando token que fica disponível para todos visualizarem
         const token = await response.jwtSign({
-            role: user.userAlreadyExists.role
+            role: userAlreadyExists.role
         }, {
             sign: {
-                sub: user.userAlreadyExists.id,
-                expiresIn: '30s'
+                sub: userAlreadyExists.id,
+                expiresIn: '1m'
             },
         })
 
         // token "secreto" 
         const refreshToken = await response.jwtSign({
-            role: user.userAlreadyExists.role
+            role: userAlreadyExists.role
         },{
             sign: {
-                sub: user.userAlreadyExists.id,
+                sub: userAlreadyExists.id,
                 expiresIn: "2d",
             }
         })

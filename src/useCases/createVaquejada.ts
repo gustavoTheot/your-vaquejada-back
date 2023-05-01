@@ -7,9 +7,10 @@ interface createManagerUseCase{
 
 export class CreateVaquejadaUeCase{
 
-    async create({title, manager_id,}: createManagerUseCase){
+    async create({title, manager_id}: createManagerUseCase){
         const dataManager = await knex('manager').select('*').where('id', manager_id).first()
 
+    
         if(!dataManager){
             throw new Error('Manager does not exist')
         }

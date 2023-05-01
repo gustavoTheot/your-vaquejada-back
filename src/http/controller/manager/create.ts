@@ -10,16 +10,25 @@ export async function createManager(request: FastifyRequest, response: FastifyRe
         email: z.string().email(),
         password: z.string(),
         cowboy_number: z.number(),
-        adm_id: z.string()
     })
 
-    const {name, phone, cpf, email, password, cowboy_number, adm_id} = createManagerBodySchema.parse(
+    const {name, phone, cpf, email, password, cowboy_number} = createManagerBodySchema.parse(
         request.body
     )
 
     try{
         const createManagerUseCase = new CreateManagerUseCase()
-        await createManagerUseCase.create({name, phone, cpf, email, password, cowboy_number, adm_id})
+        await createManagerUseCase.create(
+            {
+                name, 
+                phone, 
+                cpf, 
+                email, 
+                password, 
+                cowboy_number, 
+                adm_id: request.user.sub
+            }
+        )
 
     }catch(error){
         if(error instanceof Error)

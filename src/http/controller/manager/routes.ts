@@ -9,7 +9,7 @@ import { creations } from './creations'
 
 export async function managerRoutes(app: FastifyInstance){
     app.post("/manager", createManager)
-    app.get("/manager", listManagers)
+    app.get("/manager",listManagers)
 
     app.post('/login', authenticateManager)
 
