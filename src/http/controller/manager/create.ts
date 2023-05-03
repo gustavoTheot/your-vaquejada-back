@@ -9,10 +9,11 @@ export async function createManager(request: FastifyRequest, response: FastifyRe
         cpf: z.string().min(11).max(11),
         email: z.string().email(),
         password: z.string(),
-        cowboy_number: z.number(),
+        cowboy_number: z.number().default(50),
+        adm_id: z.string().default('')
     })
 
-    const {name, phone, cpf, email, password, cowboy_number} = createManagerBodySchema.parse(
+    const {name, phone, cpf, email, password, cowboy_number, adm_id} = createManagerBodySchema.parse(
         request.body
     )
 
@@ -26,7 +27,7 @@ export async function createManager(request: FastifyRequest, response: FastifyRe
                 email, 
                 password, 
                 cowboy_number, 
-                adm_id: request.user.sub
+                adm_id,
             }
         )
 

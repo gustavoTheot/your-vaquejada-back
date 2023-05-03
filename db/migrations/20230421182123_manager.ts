@@ -12,7 +12,7 @@ export async function up(knex: Knex): Promise<void> {
         table.integer("cowboy_number").notNullable();
         table.timestamp("date_create").defaultTo(knex.fn.now()).notNullable();
 
-        table.string('adm_id').references('id').inTable('administrator').notNullable().onDelete('CASCADE')
+        table.string('adm_id').references('administrator.id').onDelete('CASCADE')
     })
 }
 
