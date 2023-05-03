@@ -49,7 +49,6 @@ export class CreateManagerUseCase{
         cowboy_number,
         adm_id
     })
-
     }
 }
 

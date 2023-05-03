@@ -8,6 +8,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string('cowboy').notNullable()
         table.string('beats_treadmill').notNullable()
         table.string('horse').notNullable()
+        table.string('horse_beats_treadmill')
         table.integer('points')
         
         table.string('vaquejada_id').references('vaquejada.id').notNullable()

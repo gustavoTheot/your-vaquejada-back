@@ -19,5 +19,6 @@ export async function managerRoutes(app: FastifyInstance){
 
     app.get('/me/creations', creations)
 
+
     
 }

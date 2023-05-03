@@ -10,6 +10,8 @@ interface  CustomerError{
 export async function createVaquejada(request: FastifyRequest, response: FastifyReply) {
     const createManagerBodySchema = z.object({
         title: z.string(),
+        local: z.string(),
+        amountTeams: z.number()
     })
 
     const {title} = createManagerBodySchema.parse(
