@@ -1,31 +1,35 @@
+import { existsSync } from "fs"
 import { knex } from "../database"
+import { Knex } from "knex"
 
 interface CreateManagerUseCase{
     title: string
     manager_id: string
 }
 
-export async function createVaquejadaUeCase({
+export async function modifyVaquejadaUeCase({
     title,
     manager_id,
    }: CreateManagerUseCase){
 
     const dataManager = await knex('manager').select('*').where('id', manager_id).first()
+    
+    if(title){
+        throw('vaquejada existe. ')
 
-    if(!dataManager){
-        throw new Error('Manager does not exist')
     }
 
-    const {cowboy_number} = dataManager
 
-    if(cowboy_number <= 0){
-        throw new Error('Amount of cowboy exceeded')
-    }
+   
 
-    await knex('manager').where({id: manager_id}).update({cowboy_number: cowboy_number-1})
 
     await knex('vaquejada').insert({
         title: title,
         manager_id: manager_id
     })
+}
+
+
+export async function modify(knex:Knex): Promise<void>{
+    await knex.schema.renameTable('vaquejada', 'newname')
 }
