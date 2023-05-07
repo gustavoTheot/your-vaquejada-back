@@ -11,16 +11,27 @@ export async function createVaquejada(request: FastifyRequest, response: Fastify
     const createManagerBodySchema = z.object({
         title: z.string(),
         local: z.string(),
-        amountTeams: z.number()
+        date: z.string(),
+        time_start: z.number(),
+        award: z.string(),
+        amount_times: z.number().default(0)
     })
 
-    const {title} = createManagerBodySchema.parse(
+    const {title, local, date, time_start, award, amount_times} = createManagerBodySchema.parse(
         request.body
     )
         
     try{
         const createVaquejadaUseCase = new CreateVaquejadaUeCase()
-        await createVaquejadaUseCase.create({title, manager_id: request.user.sub})
+        await createVaquejadaUseCase.create(
+            {
+                title, 
+                local, 
+                date, 
+                time_start, 
+                award, 
+                amount_times,
+                manager_id: request.user.sub})
 
     }catch(error){
         if(error instanceof Error)
