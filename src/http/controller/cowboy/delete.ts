@@ -1,6 +1,4 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { KnexCowboyRepository } from "../../../repository/knex/knex-cowboy-repository";
-import { DeleteCowboyUseCase } from "../../../useCases/deleteCowboy";
 import { makeDeleteCowboyUseCase } from "../../../useCases/factore/make-delete-cowboy-use-case";
 import { UserDoesNotExist } from "../../../useCases/error/error-delete-manager";
 
