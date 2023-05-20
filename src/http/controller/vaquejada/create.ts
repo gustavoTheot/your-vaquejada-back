@@ -1,11 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import z from 'zod'
-import { CreateVaquejadaUeCase } from "../../../useCases/createVaquejada";
-
-interface  CustomerError{
-    message: string,
-    code: number
-}
+import { makeRegisterVaquejadaUseCase } from "../../../useCases/factore/make-register-vaquejada-use-case";
 
 export async function createVaquejada(request: FastifyRequest, response: FastifyReply) {
     const createManagerBodySchema = z.object({
@@ -22,8 +17,8 @@ export async function createVaquejada(request: FastifyRequest, response: Fastify
     )
         
     try{
-        const createVaquejadaUseCase = new CreateVaquejadaUeCase()
-        await createVaquejadaUseCase.create(
+        const createVaquejadaUseCase = makeRegisterVaquejadaUseCase()
+        await createVaquejadaUseCase.execute(
             {
                 title, 
                 local, 
@@ -31,7 +26,8 @@ export async function createVaquejada(request: FastifyRequest, response: Fastify
                 time_start, 
                 award, 
                 amount_times,
-                manager_id: request.user.sub})
+                manager_id: request.user.sub
+            })
 
     }catch(error){
         if(error instanceof Error)
