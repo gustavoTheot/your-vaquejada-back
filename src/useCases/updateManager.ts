@@ -26,33 +26,25 @@ export class UpdateManagerUseCase{
     email,
     password
   }: UpdateManagerUseCaseRequest): Promise<UpdateManagerUseCaseResponse>{
-    const user = await this.managerRepository.findById(id)
+    const existingManager = await this.managerRepository.findById(id)
 
-    if (!user) {
-      throw new Error('Usuário não encontrado')
+    if (!existingManager) {
+      throw new Error('Manager not found ')
     }
 
-    if(email !== undefined){
+    if(email && email !== existingManager.email){
       const emailAlreadyExist = await this.managerRepository.findByEmail(email)
 
-      if (emailAlreadyExist?.email === email) {
+      if (emailAlreadyExist) {
         throw new Error('O e-mail informado já está cadastrado')
       }
     }
 
-    const updatedFields: UpdateManagerUseCaseResponse = {};
-
-    if (name !== undefined) {
-      updatedFields.name = name;
-    }
-
-    if (phone !== undefined) {
-      updatedFields.phone = phone;
-    }
-
-    if (email !== undefined) {
-      updatedFields.email = email;
-    }
+    const updatedFields: UpdateManagerUseCaseResponse = {
+      name: name || existingManager.name,
+      phone: phone || existingManager.phone,
+      email: email || existingManager.email,
+    };
 
     if (password !== undefined) {
       const passwordHash = await hash(password, 6);

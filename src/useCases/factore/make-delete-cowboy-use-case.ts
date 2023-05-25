@@ -1,9 +1,9 @@
 import { KnexCowboyRepository } from "../../repository/knex/knex-cowboy-repository"
-import { DeleteCowboyUseCase } from "../deleteCowboy"
+import { DeleteCowBoyUseCase } from "../deleteCowboy"
 
 export function makeDeleteCowboyUseCase(){
     const cowboyRepository = new KnexCowboyRepository()
-    const deleteCowboyUseCase = new DeleteCowboyUseCase(cowboyRepository)
+    const deleteCowboyUseCase = new DeleteCowBoyUseCase(cowboyRepository)
 
     return deleteCowboyUseCase
 }

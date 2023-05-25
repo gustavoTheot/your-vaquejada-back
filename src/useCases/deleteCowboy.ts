@@ -1,20 +1,18 @@
-import { knex } from "../database"
 import { CowboyRepository } from "../repository/cowboy-repository"
-import { Manager, ManagerRepository } from "../repository/manager-repository"
+import { UserDoesNotExist } from "./error/error-delete-manager"
 
-interface DeleteCowboyUseCaseRequest{
+interface DeleteCowBoyUseCaseRequest{
   id: number
 }
 
-export class DeleteCowboyUseCase{
+export class DeleteCowBoyUseCase{
   constructor(private cowboyRepository: CowboyRepository){}
 
-  async execute({id}: DeleteCowboyUseCaseRequest){
-    const manager = await this.cowboyRepository.findById(id)
+  async execute({id}: DeleteCowBoyUseCaseRequest): Promise<void>{
+    const cowboyExists = await this.cowboyRepository.findById(id)
 
-    
-    if(!manager){
-      throw new Error('User not found')
+    if(!cowboyExists){
+      throw new UserDoesNotExist('Cowboy does not exist')
     }
 
     await this.cowboyRepository.delete(id)

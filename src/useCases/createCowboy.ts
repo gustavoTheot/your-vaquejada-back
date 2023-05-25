@@ -1,5 +1,5 @@
+import { knex } from "../database"
 import { Cowboy, CowboyRepository } from "../repository/cowboy-repository"
-import { VaquejadaRepository } from "../repository/vaquejada-repository"
 
 interface CreateCowboyUseCaseRequest{
     password: string,
@@ -30,13 +30,23 @@ export class CreateCowboyUseCase{
         vaquejada_id}: CreateCowboyUseCaseRequest): Promise<CreateCowboyUseCaseResponse>{
 
         const vaquejadaAlreadyExist = await this.cowboyRepository.fintByIdVaquejada(vaquejada_id)
+        const idCowboyAlreadyExists = await this.cowboyRepository.findByPassword(password)
 
         if(!vaquejadaAlreadyExist){
             throw new Error('vaquejada não existe')
         }
 
-        const idCowboyAlreadyExists = await this.cowboyRepository.findByPassword(password)
-    
+        const {manager_id} = vaquejadaAlreadyExist
+        const managerId = await this.cowboyRepository.findByManagerId(manager_id)
+        const { cowboy_number } = managerId 
+
+        if(cowboy_number <= 0){
+            throw new Error('Amount of cowboy exceeded')
+        }
+
+        const subtractCowboyNumber = cowboy_number - 1
+        await this.cowboyRepository.updateCowboyNumber(manager_id, subtractCowboyNumber)
+
         if(idCowboyAlreadyExists){
             throw new Error('vaqueiro já cadastrado')
         } 

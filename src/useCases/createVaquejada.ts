@@ -32,8 +32,6 @@ export class CreateVaquejadaUeCase{
             throw new Error('Amount of cowboy exceeded')
         }
 
-        await knex('manager').where({id: manager_id}).update({cowboy_number: cowboy_number-1})
-
         const vaquejada = await this.vaquejadaRepository.create({
             title,
             local,

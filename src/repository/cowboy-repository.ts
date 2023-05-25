@@ -1,3 +1,4 @@
+import { Manager } from "./manager-repository"
 import { Vaquejada } from "./vaquejada-repository"
 
 export type Cowboy = {
@@ -13,9 +14,11 @@ export type Cowboy = {
 }
 
 export interface CowboyRepository{
-    findById(id: number): Promise< Cowboy |null>
+    updateCowboyNumber(id: string, cowboy_number: number): Promise<void>
+    findByManagerId(id: string): Promise<Manager>
+    findById(id: number): Promise< Cowboy>
     fintByIdVaquejada(id: number): Promise<Vaquejada | null>
     create(data: Cowboy): Promise<Cowboy>
     findByPassword(password: string): Promise<Cowboy>
-    delete(id: string): Promise<void>
+    delete(id: number): Promise<void>
 }

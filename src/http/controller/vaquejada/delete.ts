@@ -10,7 +10,6 @@ export async function deleteVaquejada(request: FastifyRequest<{Params: {id: numb
         await vaquejadaRepository.execute({
             id
         })
-
         response.status(204).send({message: `Success in delete vaquejada ${id}`})
     }catch(error){
         console.error(error)

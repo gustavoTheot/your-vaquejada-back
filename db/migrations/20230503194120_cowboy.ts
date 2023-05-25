@@ -11,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string('horse_beats_treadmill')
         table.integer('points')
         
-        table.integer('vaquejada_id').references('vaquejada.id').notNullable()
+        table.integer('vaquejada_id').references('vaquejada.id').notNullable().onDelete('CASCADE')
     })
 }
 

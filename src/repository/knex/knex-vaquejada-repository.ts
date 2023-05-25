@@ -24,5 +24,6 @@ export class KnexVaquejadaRepository implements VaquejadaRepository{
         }
 
         await knex('vaquejada').where('id', id).delete()
+        await knex('cowboy').select('*').where('vaquejada_id', id).delete()
     }
 }

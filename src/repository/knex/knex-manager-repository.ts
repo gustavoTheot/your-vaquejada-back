@@ -22,7 +22,6 @@ export class KnexManagerRepository implements ManagerRepository{
         const manager = await knex('manager').where('id', id).first()
         
         return manager
-
     }
 
     async delete(id: string){
@@ -31,7 +30,7 @@ export class KnexManagerRepository implements ManagerRepository{
 
     async update(manager: ManagerUpdade) {
         const {id, ...updateData} = manager
-        await knex('manager').update(updateData)
+        await knex('manager').where('id', id).update(updateData)
         const updateManager = await knex('manager').where('id', id).first()
 
         return updateManager
