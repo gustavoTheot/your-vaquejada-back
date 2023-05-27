@@ -2,17 +2,7 @@ import { knex } from "../../database";
 import { Cowboy, CowboyRepository } from "../cowboy-repository";
 
 export class KnexCowboyRepository implements CowboyRepository{
-    async updateCowboyNumber(id: string, cowboy_number: number){
-        await knex('manager').where('id', id).first().update('cowboy_number', cowboy_number)
-    }
-
-    async findByManagerId(id: string) {
-        const manager = await knex('manager').where('id', id).first()
-
-        return manager
-    }
-
-    async findById(id: number){
+     async findById(id: number){
         const user = await knex('cowboy')
         .select('*')
         .where('id', id)

@@ -3,7 +3,9 @@ import { Vaquejada, VaquejadaRepository } from "../vaquejada-repository";
 
 export class KnexVaquejadaRepository implements VaquejadaRepository{
     async findById(id: number){
-        const vaquejada = await knex('vaquejada').select('*').where('id', id).first()
+        const vaquejada = await knex('vaquejada')
+        .where('id', id)
+        .first()
 
         return vaquejada
     }  

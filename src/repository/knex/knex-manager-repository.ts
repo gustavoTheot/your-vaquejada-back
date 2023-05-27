@@ -4,8 +4,9 @@ import { Manager, ManagerRepository, ManagerUpdade } from "../manager-repository
 
 export class KnexManagerRepository implements ManagerRepository{
     async findById(id: string){
-        const user = await knex('manager').select('*').where('id', id).first()
-        return user
+        const manager = await knex('manager').where('id', id).first()
+
+        return manager
     }
 
     async findByEmail(email: string) {
@@ -34,6 +35,10 @@ export class KnexManagerRepository implements ManagerRepository{
         const updateManager = await knex('manager').where('id', id).first()
 
         return updateManager
+    }
+
+    async updateCowboyNumber(id: string, cowboy_number: number){
+        await knex('manager').where('id', id).first().update('cowboy_number', cowboy_number)
     }
 
 }

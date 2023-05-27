@@ -17,7 +17,9 @@ interface CreateVaquejadaUseCaseResponse{
 }
 
 export class CreateVaquejadaUeCase{
-    constructor(private vaquejadaRepository: VaquejadaRepository, private managerRepository: ManagerRepository){}
+    constructor(
+        private vaquejadaRepository: VaquejadaRepository, 
+        private managerRepository: ManagerRepository){}
 
     async execute({title, local, date, time_start, award, amount_times, manager_id}: CreateVaquejdaUseCaseRequest): Promise<CreateVaquejadaUseCaseResponse>{
         const dataManager = await this.managerRepository.findById(manager_id)

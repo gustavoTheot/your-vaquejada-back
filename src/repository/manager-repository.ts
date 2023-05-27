@@ -25,4 +25,6 @@ export interface ManagerRepository{
     create(data:Manager): Promise<Manager>
     delete(id: string): Promise<void>
     update(manager?: ManagerUpdade): Promise<ManagerUpdade>
+    updateCowboyNumber(id: string, cowboy_number: number): Promise<void>
+
 }

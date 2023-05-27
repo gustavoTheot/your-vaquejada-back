@@ -10,7 +10,7 @@ export interface Vaquejada{
 }
 
 export interface VaquejadaRepository{
-    findById(id: number): Promise<Vaquejada>
+    findById(id: number): Promise<Vaquejada | undefined>
     create(data: Vaquejada): Promise<Vaquejada>
     delete(id: number): Promise<void | null>
 }
