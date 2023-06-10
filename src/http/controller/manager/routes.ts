@@ -18,8 +18,8 @@ export async function managerRoutes(app: FastifyInstance){
 
     app.post('/login', authenticateManager)
     app.patch('/token/refresh', refresh)
-    app.get('/me', {onRequest: [middleAutheticate]} ,profile)
-    app.get('/me/creations', creations)
+    app.get('/profile', {onRequest: [middleAutheticate]} ,profile)
+    app.get('/profile/creations', creations)
 
 
 

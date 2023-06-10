@@ -10,23 +10,26 @@ export async function updateManager(request: FastifyRequest <{Params: {id: strin
         password: z.string().optional(),
     })
 
-    const {name, phone, email, password} = updateManagerBodySchema.parse(request.body)
+
     const {id} = request.params
 
     try{
+        const {name, phone, email, password} = updateManagerBodySchema.parse(request.body)
+
         const managerRepository = makeUpdateManagerUseCase()
         await managerRepository.update({
             id: id, 
             name, 
-            phone, 
-            email, 
-            password
-        })
+            phone , 
+            email , 
+            password})
 
         return response.status(201).send({message: 'Success'})
     }catch(error){
-        if(error instanceof Error){
+        if(error instanceof z.ZodError){
             return response.status(401).send({error: error.message})
         }
+
+        return response.status(500).send({error: 'Internal Server Error'})
     }
 }

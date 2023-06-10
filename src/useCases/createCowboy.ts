@@ -4,12 +4,14 @@ import { VaquejadaRepository } from "../repository/vaquejada-repository"
 
 interface CreateCowboyUseCaseRequest{
     password: string,
-    boi_tv: boolean,
     cowboy_name: string,
     beats_treadmill: string,
     horse: string,
     horse_beats_treadmill: string,
-    points: number,
+    boi_tv: boolean,
+    cats_cut: boolean,
+    advanced_passwrd: boolean,
+    return_cowboy: boolean,
     vaquejada_id: number
 }
 
@@ -24,12 +26,14 @@ export class CreateCowboyUseCase{
 
     async create({
         password,
-        boi_tv,
         cowboy_name,
         beats_treadmill,
         horse,
         horse_beats_treadmill,
-        points,
+        boi_tv,
+        cats_cut,
+        advanced_passwrd,
+        return_cowboy,
         vaquejada_id}: CreateCowboyUseCaseRequest): Promise<CreateCowboyUseCaseResponse>{
 
         const vaquejadaAlreadyExist = await this.vaquejadaRepository.findById(vaquejada_id)
@@ -55,12 +59,14 @@ export class CreateCowboyUseCase{
 
         const cowboy = await this.cowboyRepository.create({
             password,
-            boi_tv,
             cowboy_name,
             beats_treadmill,
             horse,
             horse_beats_treadmill,
-            points,
+            boi_tv,
+            cats_cut,
+            advanced_passwrd,
+            return_cowboy,
             vaquejada_id
         })
 

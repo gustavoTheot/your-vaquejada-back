@@ -1,5 +1,5 @@
 import { knex } from "../../database";
-import { Cowboy, CowboyRepository } from "../cowboy-repository";
+import { Cowboy, CowboyRepository, CowboyUpdate } from "../cowboy-repository";
 
 export class KnexCowboyRepository implements CowboyRepository{
      async findById(id: number){
@@ -11,24 +11,6 @@ export class KnexCowboyRepository implements CowboyRepository{
         return user
     }   
 
-    async fintByIdVaquejada(id: number){
-        const vaquejada = await knex('vaquejada')
-        .select('*')
-        .where('id', id)
-        .first()
-
-        return vaquejada
-    } 
-
-    async findByPassword(password: string){
-        const user = await knex('cowboy')
-        .select('*')
-        .where('password', password)
-        .first()
-
-        return user
-    }
-
     async create(data: Cowboy){
         const [user] = await knex('cowboy').insert(data)
         const cowboy = await knex('cowboy').where({id: user}).first()
@@ -39,5 +21,22 @@ export class KnexCowboyRepository implements CowboyRepository{
 
     async delete(id: number){
         await knex('cowboy').where('id', id).delete()
+    }
+
+    async findByPassword(password: string){
+        const user = await knex('cowboy')
+        .select('*')
+        .where('password', password)
+        .first()
+
+        return user
+    }
+
+    async update(data: CowboyUpdate){
+        const {id, ...updateData} = data
+        await knex('cowboy').where('id', id).update(updateData)
+        const update = await knex('cowboy').where('id', id).first()
+
+        return update;
     }
 }

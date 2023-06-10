@@ -9,7 +9,6 @@ export type Manager = {
     adm_id: string;
 };
 
-
 export type ManagerUpdade = {
     id: string;
     name?: string;
