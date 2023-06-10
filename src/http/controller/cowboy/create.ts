@@ -11,10 +11,21 @@ export async function createCowboy(request: FastifyRequest<{Params: {id: number}
         beats_treadmill: z.string(),
         horse: z.string(),
         horse_beats_treadmill: z.string(),
-        points: z.number(),
+        advanced_password: z.boolean().default(false),
+        cats_cut: z.boolean().default(false),
+        return_cowboy: z.boolean().default(false)
     })
 
-    const {password, boi_tv, cowboy_name, beats_treadmill, horse, horse_beats_treadmill, points} = CreateCowboyBodySchema.parse(
+    const {
+        password, 
+        boi_tv, 
+        cowboy_name, 
+        beats_treadmill, 
+        horse, 
+        horse_beats_treadmill, 
+        advanced_password,
+        cats_cut,
+        return_cowboy} = CreateCowboyBodySchema.parse(
         request.body
     )
 
@@ -29,7 +40,9 @@ export async function createCowboy(request: FastifyRequest<{Params: {id: number}
             beats_treadmill,
             horse,
             horse_beats_treadmill,
-            points,
+            advanced_password,
+            cats_cut,
+            return_cowboy,
             vaquejada_id: vaquejadaId
         })
 

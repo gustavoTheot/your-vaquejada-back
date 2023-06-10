@@ -11,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
         table.boolean('boi_tv').notNullable()
         table.boolean('cats_cut').notNullable()
         table.boolean('advanced_password').notNullable()
-        table.boolean('return').notNullable()
+        table.boolean('return_cowboy').notNullable()
 
         table.integer('vaquejada_id').references('vaquejada.id').notNullable().onDelete('CASCADE')
     })

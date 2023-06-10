@@ -1,6 +1,3 @@
-import { Manager } from "./manager-repository"
-import { Vaquejada } from "./vaquejada-repository"
-
 export type Cowboy = {
     id?: number,
     password: string,
@@ -10,7 +7,7 @@ export type Cowboy = {
     horse_beats_treadmill: string,
     boi_tv: boolean,
     cats_cut: boolean,
-    advanced_passwrd: boolean,
+    advanced_password: boolean,
     return_cowboy: boolean,
     vaquejada_id: number
 }

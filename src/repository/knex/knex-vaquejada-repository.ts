@@ -9,6 +9,14 @@ export class KnexVaquejadaRepository implements VaquejadaRepository{
 
         return vaquejada
     }  
+
+    async getVaquejada(id: string){
+        const vaquejada = await knex('vaquejada')
+        .select('*')
+        .where('manager_id', id)
+        
+        return vaquejada
+    }
     
     async create(data: Vaquejada){
         const [vaquejadaId] = await knex('vaquejada').insert(data)
