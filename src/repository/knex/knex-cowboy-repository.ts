@@ -2,6 +2,22 @@ import { knex } from "../../database";
 import { Cowboy, CowboyRepository, CowboyUpdate } from "../cowboy-repository";
 
 export class KnexCowboyRepository implements CowboyRepository{
+    // pesquisando se a senha existe na vaquejada com o id passado
+    async findByPasswordInVaquejadaId(password: string, vaquejadaId: number){
+        const verify = await knex('cowboy')
+        .select('*')
+        .where('password', password)
+        .andWhere('vaquejada_id', vaquejadaId)
+        .first()
+
+        if(!verify){
+            return null
+        }
+
+        return verify
+
+    }
+    
      async findById(id: number){
         const user = await knex('cowboy')
         .select('*')
@@ -32,11 +48,18 @@ export class KnexCowboyRepository implements CowboyRepository{
         return user
     }
 
+
     async update(data: CowboyUpdate){
         const {id, ...updateData} = data
         await knex('cowboy').where('id', id).update(updateData)
         const update = await knex('cowboy').where('id', id).first()
 
         return update;
+    }
+
+    async list(vaquejada_id?: number){
+        const cowboys = knex('cowboy').select('*').where('vaquejada_id', vaquejada_id)
+
+        return cowboys;
     }
 }

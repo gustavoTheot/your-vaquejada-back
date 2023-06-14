@@ -2,6 +2,7 @@ import { knex } from "../../database";
 import { Fase, PhaseRepository } from "../phase-repositry";
 
 export class KnexPhaseRepository implements PhaseRepository{
+    // pesquisano vaquejada pelo id e ordenando por seu número
     async findByVaquejadaId(vaquejadaId: number){
         const fases = await knex('phase')
             .where('vaquejada_id', vaquejadaId)
@@ -10,15 +11,17 @@ export class KnexPhaseRepository implements PhaseRepository{
         return fases
     }
 
+    // atualizando fases, a senha do vaqueiro e o número da fase
     async update(fase: Fase){
         await knex('phase').where('id', fase.id).update(fase)
-        const updateFase = await knex('phase')
+        const updatedFase = await knex('phase')
             .where('id', fase.id)
             .first()
 
-        return updateFase;
+        return updatedFase;
     } 
 
+    // criando fase
     async create(data: Fase){
         const [phaseId] = await knex("phase").insert(data);
         const createdPhase = await knex("phase")

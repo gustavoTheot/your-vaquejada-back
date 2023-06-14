@@ -1,7 +1,6 @@
 import { KnexManagerRepository } from "../../repository/knex/knex-manager-repository";
 import { KnexPhaseRepository } from "../../repository/knex/knex-phase-repository";
 import { KnexVaquejadaRepository } from "../../repository/knex/knex-vaquejada-repository";
-import { CreateManagerUseCase } from "../createManager";
 import { CreateVaquejadaUeCase } from "../createVaquejada";
 
 export function makeRegisterVaquejadaUseCase(){

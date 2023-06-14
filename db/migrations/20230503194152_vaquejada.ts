@@ -11,7 +11,6 @@ export async function up(knex: Knex): Promise<void> {
         table.integer('time_start').notNullable()
         table.string('premium').notNullable()
         table.integer('amount_teams').notNullable()
-        table.integer('races_by_stage').notNullable()
 
         table.timestamp('date_create').defaultTo(knex.fn.now()).notNullable();
 

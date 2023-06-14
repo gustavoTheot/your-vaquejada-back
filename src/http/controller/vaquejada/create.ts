@@ -10,11 +10,9 @@ export async function createVaquejada(request: FastifyRequest, response: Fastify
         time_start: z.number(),
         premium: z.string(),
         amount_teams: z.number().default(0),
-        races_by_stage: z.number(),
-        phases: z.number(),
     })
 
-    const {title, local, date, time_start, premium, amount_teams, races_by_stage, phases} = createManagerBodySchema.parse(
+    const {title, local, date, time_start, premium, amount_teams} = createManagerBodySchema.parse(
         request.body
     )
         
@@ -28,8 +26,6 @@ export async function createVaquejada(request: FastifyRequest, response: Fastify
                 time_start, 
                 premium,
                 amount_teams,
-                races_by_stage,
-                phases,
                 manager_id: request.user.sub
             })
 

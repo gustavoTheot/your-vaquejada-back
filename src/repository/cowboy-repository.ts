@@ -9,15 +9,17 @@ export type Cowboy = {
     cats_cut: boolean,
     advanced_password: boolean,
     return_cowboy: boolean,
+    phase: number,
     vaquejada_id: number
 }
 
 export type CowboyUpdate = {
-    id: string;
-    name?: string;
-    phone?: number;
-    email?: string;
-    password?: string;
+    id: string,
+    cowboy_name?: string,
+    password?: string,
+    cats_cut?: boolean,
+    return_cowboy?: boolean,
+    phase?: number
 }
 
 export interface CowboyRepository{
@@ -26,4 +28,6 @@ export interface CowboyRepository{
     delete(id: number): Promise<void>
     update(data: CowboyUpdate): Promise<CowboyUpdate>
     findByPassword(password: string): Promise<Cowboy>
+    list(vaquejada_id?: number): Promise<Cowboy[]>
+    findByPasswordInVaquejadaId(password: string, vaquejadaId: number): Promise<Cowboy | null>
 }

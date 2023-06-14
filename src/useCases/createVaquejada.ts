@@ -9,8 +9,6 @@ interface CreateVaquejdaUseCaseRequest{
     time_start: number
     premium: string
     amount_teams: number
-    races_by_stage: number
-    phases: number
     manager_id: string
 }
 
@@ -24,7 +22,7 @@ export class CreateVaquejadaUeCase{
         private managerRepository: ManagerRepository,
         private phaseRepository: PhaseRepository){}
 
-    async execute({title, local, date, time_start, premium, amount_teams, races_by_stage, phases, manager_id}: CreateVaquejdaUseCaseRequest): Promise<CreateVaquejadaUseCaseResponse>{
+    async execute({title, local, date, time_start, premium, amount_teams, manager_id}: CreateVaquejdaUseCaseRequest): Promise<CreateVaquejadaUseCaseResponse>{
         const dataManager = await this.managerRepository.findById(manager_id)
 
         if(!dataManager){
@@ -44,7 +42,6 @@ export class CreateVaquejadaUeCase{
             time_start, 
             premium, 
             amount_teams, 
-            races_by_stage, 
             phases: [], 
             manager_id
         }
@@ -52,28 +49,18 @@ export class CreateVaquejadaUeCase{
         const createVaquejada = await this.vaquejadaRepository.create(vaquejada)
         vaquejada.id = createVaquejada.id
 
-        let currentPhase = 1;
+        const fase: Fase = {
+            vaquejada_id: vaquejada.id,
+            phase_number: 1,
+        }
 
-        while(currentPhase <= phases){
-            const racesPerPhase = Math.ceil(amount_teams / races_by_stage);
-
-            const fase: Fase = {
-                vaquejada_id: vaquejada.id,
-                phase_number: currentPhase,
-                races: racesPerPhase,
-                vaqueiros: []
-            }
-
-            vaquejada.phases.push(fase) 
+        vaquejada.phases.push(fase) 
 
 
-            const createPhase = await this.phaseRepository.create(fase)
-            fase.id = createPhase.id
+        const createPhase = await this.phaseRepository.create(fase)
+        fase.id = createPhase.id
 
-            await this.phaseRepository.update(fase)
-
-            currentPhase++
-        }        
+        // await this.phaseRepository.update(fase)
 
         return {
             createVaquejada

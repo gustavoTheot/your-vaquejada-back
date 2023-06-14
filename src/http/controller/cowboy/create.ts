@@ -3,7 +3,11 @@ import z from 'zod'
 
 import { makeRegisterCowboyUseCase } from "../../../useCases/factore/make-register-cowboy-use-case";
 
-export async function createCowboy(request: FastifyRequest<{Params: {id: number}}>, response: FastifyReply){
+interface CreateCowboyRouteParams{
+    id: string
+}
+
+export async function createCowboy(request: FastifyRequest<{ Params: CreateCowboyRouteParams }>, response: FastifyReply){
     const CreateCowboyBodySchema = z.object({
         password: z.string(),
         boi_tv: z.boolean(),
@@ -13,7 +17,8 @@ export async function createCowboy(request: FastifyRequest<{Params: {id: number}
         horse_beats_treadmill: z.string(),
         advanced_password: z.boolean().default(false),
         cats_cut: z.boolean().default(false),
-        return_cowboy: z.boolean().default(false)
+        return_cowboy: z.boolean().default(false),
+        phase: z.number().default(1)
     })
 
     const {
@@ -25,11 +30,11 @@ export async function createCowboy(request: FastifyRequest<{Params: {id: number}
         horse_beats_treadmill, 
         advanced_password,
         cats_cut,
-        return_cowboy} = CreateCowboyBodySchema.parse(
+        return_cowboy, phase} = CreateCowboyBodySchema.parse(
         request.body
     )
 
-    const vaquejadaId = request.params.id
+    const vaquejadaId = parseInt(request.params.id);
 
     try{
         const createCowboy =  makeRegisterCowboyUseCase()
@@ -43,7 +48,9 @@ export async function createCowboy(request: FastifyRequest<{Params: {id: number}
             advanced_password,
             cats_cut,
             return_cowboy,
-            vaquejada_id: vaquejadaId
+            phase,
+            vaquejada_id: vaquejadaId,
+            manager_id: request.user.sub
         })
 
         return response.status(201).send({message: 'Vaqueiro e Bate-esteira criados!'})

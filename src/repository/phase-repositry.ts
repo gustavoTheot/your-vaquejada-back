@@ -1,9 +1,8 @@
 export interface Fase{
-    id?: number
-    vaquejada_id?: number;
-    phase_number: number;
-    races: number;
-    vaqueiros: number[]
+    id?: number,
+    vaquejada_id?: number,
+    phase_number?: number,
+    password_cowboy?: string
 }
 
 export interface PhaseRepository{

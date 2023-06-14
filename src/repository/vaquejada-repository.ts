@@ -8,13 +8,13 @@ export interface Vaquejada{
     time_start: number
     premium: string
     amount_teams: number
-    races_by_stage: number
     phases: Fase[]
     manager_id: string
 }
 
 export interface VaquejadaRepository{
-    findById(id: number): Promise<Vaquejada | undefined>
+    findById(id: number): Promise<Vaquejada | null>
+    findManagerIdByVaqueada(id: number, managerId: string): Promise<Vaquejada | undefined>
     getVaquejada(id: string): Promise<Vaquejada[]>
     create(data: Vaquejada): Promise<Vaquejada>
     delete(id: number): Promise<void | null>

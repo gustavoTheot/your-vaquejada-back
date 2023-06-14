@@ -5,8 +5,7 @@ export async function up(knex: Knex): Promise<void> {
         table.increments('id').primary().unique()
         table.integer('vaquejada_id').notNullable().references('vaquejada.id').onDelete('CASCADE');
         table.integer('phase_number').notNullable()
-        table.integer('races').notNullable()
-        table.integer('vaqueiros').notNullable()
+        table.string('password_cowboy')
         table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable()
     })
 }

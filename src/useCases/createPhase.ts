@@ -4,7 +4,7 @@ interface CreatePhaseUseCaseRequest{
     vaquejada_id?: number
     phase_number: number,
     races: number,
-    vaqueiros: []
+    password_cowboy: string
 }
 
 interface CreatePhaseUseCaseResponse{
@@ -14,15 +14,14 @@ interface CreatePhaseUseCaseResponse{
 export class CreatePhaseUseCase{
     constructor(private phaseRepository: PhaseRepository){}
 
-    async execute({vaquejada_id, phase_number, races, vaqueiros}: CreatePhaseUseCaseRequest): Promise<CreatePhaseUseCaseResponse> {
+    async execute({vaquejada_id, phase_number, password_cowboy}: CreatePhaseUseCaseRequest): Promise<CreatePhaseUseCaseResponse> {
         const vaquejada = await this.phaseRepository.findByVaquejadaId(vaquejada_id)
 
         if(!vaquejada){
             throw new Error('Erro em create phase use case')
         }
 
-
-        const phase = await this.phaseRepository.create({vaquejada_id, phase_number, races, vaqueiros}) 
+        const phase = await this.phaseRepository.create({vaquejada_id, phase_number, password_cowboy}) 
 
         return {phase}
     }

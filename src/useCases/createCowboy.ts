@@ -1,5 +1,6 @@
 import { Cowboy, CowboyRepository } from "../repository/cowboy-repository"
 import { ManagerRepository } from "../repository/manager-repository"
+import { Fase, PhaseRepository } from "../repository/phase-repositry"
 import { VaquejadaRepository } from "../repository/vaquejada-repository"
 
 interface CreateCowboyUseCaseRequest{
@@ -12,17 +13,25 @@ interface CreateCowboyUseCaseRequest{
     cats_cut: boolean,
     advanced_password: boolean,
     return_cowboy: boolean,
-    vaquejada_id: number
+    phase: number,
+    vaquejada_id: number,
+    manager_id: string,
 }
 
 interface CreateCowboyUseCaseResponse{
-    cowboy: Cowboy
+    createCowboy: Cowboy
+}
+
+interface Phase{
+    vaquejada_id: number,
+    cowboys: Cowboy[]
 }
 
 export class CreateCowboyUseCase{
     constructor(private cowboyRepository: CowboyRepository, 
         private vaquejadaRepository: VaquejadaRepository, 
-        private managerRepository: ManagerRepository){}
+        private managerRepository: ManagerRepository,
+        private phaseRepository: PhaseRepository){}
 
     async create({
         password,
@@ -34,30 +43,23 @@ export class CreateCowboyUseCase{
         cats_cut,
         advanced_password,
         return_cowboy,
-        vaquejada_id}: CreateCowboyUseCaseRequest): Promise<CreateCowboyUseCaseResponse>{
-
-        const vaquejadaAlreadyExist = await this.vaquejadaRepository.findById(vaquejada_id)
-        if(!vaquejadaAlreadyExist){
+        phase,
+        vaquejada_id,
+        manager_id}: CreateCowboyUseCaseRequest): Promise<CreateCowboyUseCaseResponse>{
+    
+        const vaquejadaAlreadyExist = await this.vaquejadaRepository.findManagerIdByVaqueada(vaquejada_id, manager_id)
+     
+        if(vaquejadaAlreadyExist === undefined){
             throw new Error('vaquejada não existe')
         }
+        
 
-        const {manager_id} = vaquejadaAlreadyExist
-        const manager = await this.managerRepository.findById(manager_id)
-
-        if(manager.cowboy_number <= 0){
-            throw new Error('Amount of cowboy exceeded')
-        }
-
-        const updateCowboyNumber = manager.cowboy_number
-        await this.managerRepository.updateCowboyNumber(manager_id, updateCowboyNumber)
-
-
-        const cowboyAlreadyExists = await this.cowboyRepository.findByPassword(password)
+        const cowboyAlreadyExists = await this.cowboyRepository.findByPasswordInVaquejadaId(password, vaquejada_id)
         if(cowboyAlreadyExists){
-            throw new Error('Cowboy already exists')
+            throw new Error('Cowboy already exists in vaquejada')
         } 
 
-        const cowboy = await this.cowboyRepository.create({
+        const cowboy: Cowboy = {
             password,
             cowboy_name,
             beats_treadmill,
@@ -67,10 +69,26 @@ export class CreateCowboyUseCase{
             cats_cut,
             advanced_password,
             return_cowboy,
+            phase,
             vaquejada_id
-        })
+        }
 
-        return {cowboy}
+        const createCowboy = await this.cowboyRepository.create(cowboy)
+        cowboy.id = createCowboy.id
+
+        const newCowboyInPhase: Fase = {
+            vaquejada_id: vaquejada_id,
+            phase_number: 1,
+            password_cowboy: password
+        }
+
+        const createPhase = await this.phaseRepository.create(newCowboyInPhase);
+        newCowboyInPhase.id = createPhase.id;
+
+        await this.phaseRepository.update(newCowboyInPhase);
+
+
+        return {createCowboy}
     } 
 }
 

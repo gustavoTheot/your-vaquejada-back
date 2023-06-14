@@ -6,6 +6,7 @@ export async function listVaquejada(request: FastifyRequest, response: FastifyRe
     const manager_id = request.user.sub
     
     const vaquejadaWithPhases = []
+    const phasesVaquejada = []
 
     const vaquejadaRepository = makeGetVaquejadaUseCase()
     const vaquejadaResult = await vaquejadaRepository.execute({ manager_id });
@@ -17,8 +18,12 @@ export async function listVaquejada(request: FastifyRequest, response: FastifyRe
 
         vaquejada.phases = phases
         vaquejadaWithPhases.push(vaquejada)
+
+        for(const phase of phases){
+            const phase = 0
+        }
     }
     
 
-    return response.status(200).send(data)
+    return response.status(200).send({data: vaquejadaWithPhases})
 }
