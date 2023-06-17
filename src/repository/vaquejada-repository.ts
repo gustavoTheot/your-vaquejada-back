@@ -1,4 +1,4 @@
-import { Fase } from "./phase-repositry"
+import { Phase } from "./phase-repository"
 
 export interface Vaquejada{
     id?: number
@@ -8,7 +8,7 @@ export interface Vaquejada{
     time_start: number
     premium: string
     amount_teams: number
-    phases: Fase[]
+    phases: Phase[]
     manager_id: string
 }
 

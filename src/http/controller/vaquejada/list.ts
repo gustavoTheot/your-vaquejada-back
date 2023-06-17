@@ -5,25 +5,25 @@ import { makeGetVaquejadaUseCase } from '../../../useCases/factore/make-get-vaqu
 export async function listVaquejada(request: FastifyRequest, response: FastifyReply){
     const manager_id = request.user.sub
     
-    const vaquejadaWithPhases = []
-    const phasesVaquejada = []
 
     const vaquejadaRepository = makeGetVaquejadaUseCase()
     const vaquejadaResult = await vaquejadaRepository.execute({ manager_id });
     const data = vaquejadaResult.vaquejada
-        
+
+    const vaquejadaWithPhases = []
+
+
     for (const vaquejada of data) {
-        
-        const phases = await knex('phase').select('*').where('vaquejada_id', vaquejada.id);
+        const dataPhase = await knex('phase').select('*').where('vaquejada_id', vaquejada.id)
+        for(const phase of dataPhase){
+            const passwords = await knex('passwords').select('password_cowboy').where('phase_id', phase.id)
 
-        vaquejada.phases = phases
-        vaquejadaWithPhases.push(vaquejada)
-
-        for(const phase of phases){
-            const phase = 0
+            phase.password_cowboy = passwords
         }
-    }
     
+        vaquejada.phases = dataPhase;
+        vaquejadaWithPhases.push(vaquejada);
+    }
 
-    return response.status(200).send({data: vaquejadaWithPhases})
+    return response.status(200).send({Vaquejada: vaquejadaWithPhases})
 }

@@ -1,6 +1,6 @@
+import { knex } from "../database"
 import { Cowboy, CowboyRepository } from "../repository/cowboy-repository"
-import { ManagerRepository } from "../repository/manager-repository"
-import { Fase, PhaseRepository } from "../repository/phase-repositry"
+import { Phase, PhaseRepository } from "../repository/phase-repository"
 import { VaquejadaRepository } from "../repository/vaquejada-repository"
 
 interface CreateCowboyUseCaseRequest{
@@ -22,16 +22,12 @@ interface CreateCowboyUseCaseResponse{
     createCowboy: Cowboy
 }
 
-interface Phase{
-    vaquejada_id: number,
-    cowboys: Cowboy[]
-}
-
 export class CreateCowboyUseCase{
-    constructor(private cowboyRepository: CowboyRepository, 
-        private vaquejadaRepository: VaquejadaRepository, 
-        private managerRepository: ManagerRepository,
-        private phaseRepository: PhaseRepository){}
+    constructor(
+        private cowboyRepository: CowboyRepository, 
+        private vaquejadaRepository: VaquejadaRepository,
+        private phaseRepository: PhaseRepository
+        ){}
 
     async create({
         password,
@@ -52,7 +48,6 @@ export class CreateCowboyUseCase{
         if(vaquejadaAlreadyExist === undefined){
             throw new Error('vaquejada não existe')
         }
-        
 
         const cowboyAlreadyExists = await this.cowboyRepository.findByPasswordInVaquejadaId(password, vaquejada_id)
         if(cowboyAlreadyExists){
@@ -76,22 +71,17 @@ export class CreateCowboyUseCase{
         const createCowboy = await this.cowboyRepository.create(cowboy)
         cowboy.id = createCowboy.id
 
-        const newCowboyInPhase: Fase = {
-            vaquejada_id: vaquejada_id,
+        const updatePhase: Phase = {
+            id: 0,
+            vaquejada_id: createCowboy.vaquejada_id,
             phase_number: 1,
-            password_cowboy: password
         }
 
-        const createPhase = await this.phaseRepository.create(newCowboyInPhase);
-        newCowboyInPhase.id = createPhase.id;
-
-        await this.phaseRepository.update(newCowboyInPhase);
-
+        await this.phaseRepository.addCowboyInPhase(createCowboy.vaquejada_id, createCowboy.phase,  createCowboy.password)
 
         return {createCowboy}
     } 
 }
-
 
 
  

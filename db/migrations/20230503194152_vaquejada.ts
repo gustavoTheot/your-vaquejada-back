@@ -15,11 +15,10 @@ export async function up(knex: Knex): Promise<void> {
         table.timestamp('date_create').defaultTo(knex.fn.now()).notNullable();
 
         table.string('manager_id').references('manager.id').notNullable().onDelete('CASCADE')
-    });
 
-    await knex.schema.table("vaquejada", (table) => {
-        table.integer("phases").notNullable().defaultTo(1)
-    })
+        table.specificType('phases', 'JSONB[]')
+
+    });
 }
 
 

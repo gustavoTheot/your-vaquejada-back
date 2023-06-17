@@ -1,5 +1,5 @@
 import { ManagerRepository } from "../repository/manager-repository"
-import { Fase, PhaseRepository } from "../repository/phase-repositry"
+import { Phase, PhaseRepository } from "../repository/phase-repository"
 import { Vaquejada, VaquejadaRepository } from "../repository/vaquejada-repository"
 
 interface CreateVaquejdaUseCaseRequest{
@@ -20,7 +20,8 @@ export class CreateVaquejadaUeCase{
     constructor(
         private vaquejadaRepository: VaquejadaRepository, 
         private managerRepository: ManagerRepository,
-        private phaseRepository: PhaseRepository){}
+        private phaseRepository: PhaseRepository
+    ){}
 
     async execute({title, local, date, time_start, premium, amount_teams, manager_id}: CreateVaquejdaUseCaseRequest): Promise<CreateVaquejadaUseCaseResponse>{
         const dataManager = await this.managerRepository.findById(manager_id)
@@ -49,18 +50,14 @@ export class CreateVaquejadaUeCase{
         const createVaquejada = await this.vaquejadaRepository.create(vaquejada)
         vaquejada.id = createVaquejada.id
 
-        const fase: Fase = {
-            vaquejada_id: vaquejada.id,
-            phase_number: 1,
+        const newPhase: Phase = {
+            id: 0,
+            vaquejada_id: vaquejada.id || 0,
+            password_cowboy: []
         }
 
-        vaquejada.phases.push(fase) 
-
-
-        const createPhase = await this.phaseRepository.create(fase)
-        fase.id = createPhase.id
-
-        // await this.phaseRepository.update(fase)
+        const phaseId = await this.phaseRepository.create(newPhase)
+        newPhase.id = phaseId.id
 
         return {
             createVaquejada

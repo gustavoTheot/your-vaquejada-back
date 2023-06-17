@@ -1,33 +1,87 @@
 import { knex } from "../../database";
-import { Fase, PhaseRepository } from "../phase-repositry";
+import { Passowrds, Phase, PhaseRepository } from "../phase-repository";
 
 export class KnexPhaseRepository implements PhaseRepository{
-    // pesquisano vaquejada pelo id e ordenando por seu número
-    async findByVaquejadaId(vaquejadaId: number){
-        const fases = await knex('phase')
-            .where('vaquejada_id', vaquejadaId)
-            .orderBy('phase_number')
+    // pesquisando vaquejada pelo id
+    async findById(id: number){
+        const phase = await knex('phase').where('id', id).first()
 
-        return fases
+        return phase
     }
 
-    // atualizando fases, a senha do vaqueiro e o número da fase
-    async update(fase: Fase){
-        await knex('phase').where('id', fase.id).update(fase)
-        const updatedFase = await knex('phase')
-            .where('id', fase.id)
+    // pesquisando vaquejada pelo seu id e pelo id do gerente
+    async findByVaquejadaId(vaquejadaId: number){
+        const phases = await knex('phase')
+            .select('*')
+            .where('vaquejada_id', vaquejadaId)
+
+        if (!phases || phases.length === 0) {
+            return null;
+        }
+
+        return phases
+    }  
+
+    // criando vaquejada
+    async create(data: Phase){
+        const [phaseId] = await knex('phase')
+            .insert(data)
+
+        const createPhase = await knex('phase')
+            .where('id', phaseId)
             .first()
 
-        return updatedFase;
-    } 
+        return createPhase
+    }
 
-    // criando fase
-    async create(data: Fase){
-        const [phaseId] = await knex("phase").insert(data);
-        const createdPhase = await knex("phase")
-            .where("id", phaseId)
-            .first();
+    async update(data: Phase) {        
+        const phase = await this.findById(data.id)
+        await knex('phase')
+            .where('id', data.id)
+            .update(data)
 
-        return createdPhase;
-    }  
+        return phase
+    }
+
+    async addPasswordInTable(password: string, phaseId: number){
+        const [passwordId] = await knex('passwords')
+            .insert(
+                {
+                    password_cowboy: password, 
+                    phase_id: phaseId
+                })
+
+        const createPassword = await knex('passwords')
+            .where('id', passwordId)
+            .first()
+
+        return createPassword
+    }
+
+    async addCowboyInPhase(vaquejadaId: number, phaseNumber: number, passwordCowboy: string){
+        const phases = await this.findByVaquejadaId(vaquejadaId)
+
+        if (!phases || phases.length === 0) {
+            return;
+        }
+
+        const [phaseId] = phases
+        const passwordId = await this.addPasswordInTable(passwordCowboy, phaseId.id)
+        
+
+        for(const phase of phases){
+            const updataPhases = {
+                ...phases,
+                password_cowboy: [...phase.password_cowboy, passwordId]
+            }
+
+            await knex('phase')
+                .where('id', phase.id)
+                .update(
+                    {
+                        phase_number: phaseNumber, 
+                        password_cowboy: updataPhases.password_cowboy
+                    })
+        }
+    }
 }
