@@ -71,12 +71,6 @@ export class CreateCowboyUseCase{
         const createCowboy = await this.cowboyRepository.create(cowboy)
         cowboy.id = createCowboy.id
 
-        const updatePhase: Phase = {
-            id: 0,
-            vaquejada_id: createCowboy.vaquejada_id,
-            phase_number: 1,
-        }
-
         await this.phaseRepository.addCowboyInPhase(createCowboy.vaquejada_id, createCowboy.phase,  createCowboy.password)
 
         return {createCowboy}

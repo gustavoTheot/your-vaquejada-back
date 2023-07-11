@@ -10,10 +10,11 @@ interface CreateCowboyRouteParams{
 
 interface CustomRouteGenericInterface extends RouteGenericInterface {
     Params: CreateCowboyRouteParams;
-  }
+}
 
 export async function vaqueiroRoutes(app: FastifyInstance){
     app.post<CustomRouteGenericInterface>('/vaquejada/:id', {onRequest: [middleAutheticate]}, createCowboy)
-    app.get('/vaquejadas/:id', listCowboys)
+    app.get<CustomRouteGenericInterface>('/vaquejadas/:id', listCowboys)
+
     app.delete('/vaquejada/:id/vaqueiro/:id', deleteVaqueiro)
 }

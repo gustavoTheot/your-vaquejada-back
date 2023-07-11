@@ -3,9 +3,9 @@ import { knex } from '../../../database'
 import { makeGetVaquejadaUseCase } from '../../../useCases/factore/make-get-vaquejada-use-case'
 
 export async function listVaquejada(request: FastifyRequest, response: FastifyReply){
+    await request.jwtVerify()
     const manager_id = request.user.sub
     
-
     const vaquejadaRepository = makeGetVaquejadaUseCase()
     const vaquejadaResult = await vaquejadaRepository.execute({ manager_id });
     const data = vaquejadaResult.vaquejada

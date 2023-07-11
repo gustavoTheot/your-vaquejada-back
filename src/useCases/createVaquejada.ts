@@ -51,7 +51,6 @@ export class CreateVaquejadaUeCase{
         vaquejada.id = createVaquejada.id
 
         const newPhase: Phase = {
-            id: 0,
             vaquejada_id: vaquejada.id || 0,
             password_cowboy: []
         }

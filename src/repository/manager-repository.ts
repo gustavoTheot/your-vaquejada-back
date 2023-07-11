@@ -18,7 +18,7 @@ export type ManagerUpdade = {
 }
 
 export interface ManagerRepository{
-    findById(id: string): Promise< Manager>
+    findById(id: string): Promise< Manager | undefined>
     findByEmail(email: string): Promise<Manager | null>
     findByCpf(cpf: string): Promise<Manager>
     create(data:Manager): Promise<Manager>

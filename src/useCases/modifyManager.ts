@@ -16,7 +16,7 @@ interface UpdateManagerUseCaseResponse {
   password?: string
 }
 
-export class UpdateManagerUseCase{
+export class ModifyManagerUseCase{
   constructor(private managerRepository: ManagerRepository){}
 
   async update({

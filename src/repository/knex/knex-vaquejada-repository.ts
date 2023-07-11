@@ -1,5 +1,5 @@
 import { knex } from "../../database";
-import { Vaquejada, VaquejadaRepository } from "../vaquejada-repository";
+import { Vaquejada, VaquejadaRepository, VaquejadaUpdate } from "../vaquejada-repository";
 
 export class KnexVaquejadaRepository implements VaquejadaRepository{
     // pesquisando vaquejada pelo id
@@ -46,5 +46,17 @@ export class KnexVaquejadaRepository implements VaquejadaRepository{
 
         await knex('vaquejada').where('id', id).delete()
         await knex('cowboy').select('*').where('vaquejada_id', id).delete()
+    }
+
+    async update(vaquejada: VaquejadaUpdate) {
+        const {id, ...updateData} = vaquejada
+        await knex('vaquejada').where('id', id).update(updateData)
+        const updateVaquejada = await knex('vaquejada').where('id', id).first()
+
+        return updateVaquejada
+    }
+
+    async updatePhase(id: string, phase_number: number): Promise<void> {
+        await knex('phase').where('id', id).first().update('phase_number', phase_number)
     }
 }

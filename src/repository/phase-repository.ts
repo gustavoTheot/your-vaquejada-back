@@ -5,7 +5,7 @@ export interface Passowrds{
 }
 
 export interface Phase{
-    id: number,
+    id?: number,
     vaquejada_id: number,
     phase_number?: number,
     password_cowboy?: Passowrds[]

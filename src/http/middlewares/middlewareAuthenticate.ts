@@ -6,6 +6,4 @@ export async function middleAutheticate(request: FastifyRequest, response: Fasti
     }catch(err){
         return response.status(401).send({message: "Unauthorized"})
     }
-
-    
 }

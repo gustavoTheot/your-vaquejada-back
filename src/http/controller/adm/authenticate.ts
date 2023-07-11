@@ -1,19 +1,19 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { AuthenticateManagerUseCase } from "../../../useCases/authenticate";
+import { AuthenticateADMUseCase } from "../../../useCases/authenticate_adm";
 
-export async function authenticateManager(request: FastifyRequest, response: FastifyReply){
-    const authenticateManagerBodySchema = z.object({
+export async function authenticateADM(request: FastifyRequest, response: FastifyReply){
+    const authenticateADMBodySchema = z.object({
         email: z.string().email(),
         password: z.string(),
     })
 
-    const {email, password} = authenticateManagerBodySchema.parse(request.body)
+    const {email, password} = authenticateADMBodySchema.parse(request.body)
 
     try{
-        const authenticateManagerUseCase = new AuthenticateManagerUseCase()
+        const authenticateADMUseCase = new AuthenticateADMUseCase()
 
-        const {userAlreadyExists} = await authenticateManagerUseCase.execute({
+        const {userAlreadyExists} = await authenticateADMUseCase.execute({
             email, 
             password
         })
@@ -24,7 +24,7 @@ export async function authenticateManager(request: FastifyRequest, response: Fas
         }, {
             sign: {
                 sub: userAlreadyExists.id,
-                expiresIn: '2d'
+                expiresIn: '1m'
             },
         })
 
@@ -38,14 +38,12 @@ export async function authenticateManager(request: FastifyRequest, response: Fas
             }
         })
 
-        const managerId = await userAlreadyExists.id
-
         return response.setCookie('refreshToken', refreshToken, {
             path: '/', // quais rotas vão ter acesso
             secure: true, // está utilizando https?
             sameSite: true, // só é acessivel dentro do mesmo dominio
             httpOnly: true // acessado pelo back e n pelo front
-        }).status(200).send({token, managerId})
+        }).status(200).send({token})
         
 
     }catch(err){

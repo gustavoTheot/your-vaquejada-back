@@ -3,6 +3,8 @@ import z from 'zod'
 import { makeRegisterVaquejadaUseCase } from "../../../useCases/factore/make-register-vaquejada-use-case";
 
 export async function createVaquejada(request: FastifyRequest, response: FastifyReply) {
+    await request.jwtVerify()
+    
     const createManagerBodySchema = z.object({
         title: z.string(),
         local: z.string(),
@@ -15,9 +17,10 @@ export async function createVaquejada(request: FastifyRequest, response: Fastify
     const {title, local, date, time_start, premium, amount_teams} = createManagerBodySchema.parse(
         request.body
     )
-        
+
     try{
         const createVaquejadaUseCase = makeRegisterVaquejadaUseCase()
+        const manager_id = request.user.sub;
         await createVaquejadaUseCase.execute(
             {
                 title, 
@@ -26,7 +29,7 @@ export async function createVaquejada(request: FastifyRequest, response: Fastify
                 time_start, 
                 premium,
                 amount_teams,
-                manager_id: request.user.sub
+                manager_id
             })
 
     }catch(error){
