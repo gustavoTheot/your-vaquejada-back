@@ -16,5 +16,5 @@ export async function vaqueiroRoutes(app: FastifyInstance){
     app.post<CustomRouteGenericInterface>('/vaquejada/:id', {onRequest: [middleAutheticate]}, createCowboy)
     app.get<CustomRouteGenericInterface>('/vaquejadas/:id', listCowboys)
 
-    app.delete('/vaquejada/:id/vaqueiro/:id', deleteVaqueiro)
+    app.delete('/cowboy/:id', deleteVaqueiro)
 }

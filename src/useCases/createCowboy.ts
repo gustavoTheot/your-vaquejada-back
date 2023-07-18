@@ -14,6 +14,8 @@ interface CreateCowboyUseCaseRequest{
     advanced_password: boolean,
     return_cowboy: boolean,
     phase: number,
+    valeu_boi: boolean,
+    zero: boolean,
     vaquejada_id: number,
     manager_id: string,
 }
@@ -39,6 +41,8 @@ export class CreateCowboyUseCase{
         cats_cut,
         advanced_password,
         return_cowboy,
+        valeu_boi,
+        zero,
         phase,
         vaquejada_id,
         manager_id}: CreateCowboyUseCaseRequest): Promise<CreateCowboyUseCaseResponse>{
@@ -64,6 +68,8 @@ export class CreateCowboyUseCase{
             cats_cut,
             advanced_password,
             return_cowboy,
+            valeu_boi,
+            zero,
             phase,
             vaquejada_id
         }

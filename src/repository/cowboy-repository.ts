@@ -10,6 +10,8 @@ export type Cowboy = {
     advanced_password: boolean,
     return_cowboy: boolean,
     phase: number,
+    valeu_boi: boolean,
+    zero: boolean,
     vaquejada_id: number
 }
 
@@ -19,6 +21,8 @@ export type CowboyUpdate = {
     password?: string,
     cats_cut?: boolean,
     return_cowboy?: boolean,
+    valeu_boi: boolean,
+    zero: boolean,
     phase?: number
 }
 

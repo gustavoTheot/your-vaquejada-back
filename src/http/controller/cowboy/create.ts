@@ -17,6 +17,8 @@ export async function createCowboy(request: FastifyRequest<{ Params: CreateCowbo
         horse_beats_treadmill: z.string(),
         advanced_password: z.boolean().default(false),
         cats_cut: z.boolean().default(false),
+        valeu_boi: z.boolean().default(false),
+        zero: z.boolean().default(false),
         return_cowboy: z.boolean().default(false),
         phase: z.number().default(1)
     })
@@ -30,6 +32,8 @@ export async function createCowboy(request: FastifyRequest<{ Params: CreateCowbo
         horse_beats_treadmill, 
         advanced_password,
         cats_cut,
+        valeu_boi,
+        zero,
         return_cowboy, phase} = CreateCowboyBodySchema.parse(
         request.body
     )
@@ -48,6 +52,8 @@ export async function createCowboy(request: FastifyRequest<{ Params: CreateCowbo
             advanced_password,
             cats_cut,
             return_cowboy,
+            valeu_boi,
+            zero,
             phase,
             vaquejada_id: vaquejadaId,
             manager_id: request.user.sub

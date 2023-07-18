@@ -7,8 +7,8 @@ import { deleteVaquejada } from "./delete";
 import { allListVaquejada } from "./all-list";
 
 export async function vaquejadaRoutes(app: FastifyInstance){
-    app.post('/vaquejada', {onRequest: [middleAutheticate]}, createVaquejada)
-    app.get('/vaquejada', {onRequest: [middleAutheticate]}, listVaquejada)
+    app.post('/vaquejada', createVaquejada)
+    app.get('/vaquejada', listVaquejada)
     app.get('/all-vaquejada', allListVaquejada)
 
 
